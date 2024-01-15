@@ -1,4 +1,4 @@
-# PSS: A simple discord bot, written in python.
+# Discord Bot: A simple discord bot, written in python.
 
 ## Overview
 
