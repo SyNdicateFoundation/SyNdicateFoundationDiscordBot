@@ -609,4 +609,4 @@ async def send(ctx, *, message=None):
 
 
 
-client.run('MTE5NTI5MDg1Njk4MzM4NDA4NA.G1hl16.xCszgH-rcy-znOMwHRJVWmtRFRRplqH-GxKtBs')
+client.run('your-token')
