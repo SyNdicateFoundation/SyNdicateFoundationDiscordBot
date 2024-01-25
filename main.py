@@ -584,9 +584,9 @@ async def role(ctx, args, member: discord.Member, role: discord.Role):
         s = discord.Embed(title=f"No perm",
                               description=f"i need manage members perm.\n"
                                           f"x!help for commands .", color=0xFF0000)
-        await ctx.send(embed=s)
-        await s.add_reaction('\u2705')
-        await s.add_reaction('\u274c')
+        ss = await ctx.send(embed=s)
+        await ss.add_reaction('\u2705')
+        await ss.add_reaction('\u274c')
 
 
 @client.command()
@@ -595,12 +595,12 @@ async def join(ctx):
     if (ctx.author.voice):
         s = discord.Embed(title=f"connected", description=f"voice connected\n"
                                                               f"x!help for commands .", color=0xFF0000)
-        await ctx.send(embed=s)
+        ss = await ctx.send(embed=s)
         channel = ctx.author.voice.channel
         await channel.connect()
 
-        await s.add_reaction('\u2705')
-        await s.add_reaction('\u274c')
+        await ss.add_reaction('\u2705')
+        await ss.add_reaction('\u274c')
     else:
         s = discord.Embed(title=f"you arent in a voice", description=f"join a voice for connect\n"
                                                                          f"x!help for commands .", color=0xFF0000)
@@ -614,10 +614,10 @@ async def leave(ctx):
     await ctx.message.delete()
     s = discord.Embed(title=f"disconnected", description=f"leaved\n"
                                                              f"x!help for commands .", color=0xFF0000)
-    await ctx.send(embed=s)
+    ss = await ctx.send(embed=s)
     await ctx.voice_client.disconnect()
-    await s.add_reaction('\u2705')
-    await s.add_reaction('\u274c')
+    await ss.add_reaction('\u2705')
+    await ss.add_reaction('\u274c')
 
 
 @client.command()
@@ -630,9 +630,9 @@ async def vote(ctx, *, message=None):
         s.add_field(name="Vote For :", value=f"{message}")
         if ctx.guild.icon:
             s.set_thumbnail(url=ctx.guild.icon.url)
-        await ctx.send(embed=s)
-        await s.add_reaction('\u2705')
-        await s.add_reaction('\u274c')
+        ss = await ctx.send(embed=s)
+        await ss.add_reaction('\u2705')
+        await ss.add_reaction('\u274c')
 
 
 @client.command()
