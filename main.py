@@ -5,6 +5,9 @@ import discord
 from discord.ext import commands
 import openai
 
+import basecommands
+import events
+
 openai.api_key = 'your-api-key'
 token = 'your-token'
 intents = discord.Intents.all()
@@ -12,86 +15,36 @@ intents.members = True
 client = commands.Bot(command_prefix='x!', intents=intents)
 starttime = datetime.datetime.utcnow()
 
-#Send an error while command is unknown
+
+async def start():
+    await client.add_cog(basecommands.BaseCommands(client))
+    await client.add_cog(events.Events(client))
+
+
+# Send an error while command is unknown
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.send(embed=discord.Embed(title=f"Error!",
                                            description=f"Command not found. use x!help", color=ctx.author.color)
-        )
+                       )
 
 
-#do things while we are ready
+# do things while we are ready
 @client.event
 async def on_ready():
+    start()
     print('Servers connected to:')
     for guild in client.guilds:
         print(guild.name)
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f" x!help"))
 
 
-@client.event
-async def on_message(message: discord.message.Message):
-    if message.author.bot:
-        return
 
-    channel = client.get_channel(message.channel.id)
-    if message.channel.id == 1200147835648221296:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo-1106",
-            messages=[
-                {"role": "system", "content": "You are xenon bot"},
-                {"role": "user", "content": message.content}
-            ],
-            max_tokens=150,
-            temperature=0.7,
-            top_p=1.0,
-            frequency_penalty=0.0,
-            presence_penalty=0.0
-        )
-
-        await message.channel.send(response['choices'][0]['message']['content'])
-        return
-
-    await client.process_commands(message)
 
 client.remove_command('help')
 
 
-@client.command(aliases=['help', 'HELP', 'HElp', 'HELp'])
-async def HElP(ctx: commands.Context):
-    await ctx.send(embed=discord.Embed(title=f"Help", description=f"> :nerd~1: Help\n"
-                                                     f"{ctx.author.name}\n"
-                                                     f"development_team\n"
-                                                     f"clear\n"
-                                                     f"ping\n"
-                                                     f"kick\n"
-                                                     f"ban\n"
-                                                     f"moveall\n"
-                                                     f"avatar\n"
-                                                     f"stats\n"
-                                                     f"userinfo\n"
-                                                     f"serverinfo\n"
-                                                     f"uptime\n"
-                                                     f"suggest\n"
-                                                     f"helpme\n"
-                                                     f"lock\n"
-                                                     f"unlock\n"
-                                                     f"unban\n"
-                                                     f"mute\n"
-                                                     f"unmute\n"
-                                                     f"role\n"
-                                                     f"join\n"
-                                                     f"send\n"
-                                                     f"> Prefix -->  x!", color=0x0B5394))
-
-
-@client.command()
-async def development_team(ctx: commands.Context):
-    await ctx.send(embed=discord.Embed(title=f"Xenon Development Community", description=f"Xenon Development Community\n"
-                                                                            f"https://discord.gg/BzY7hf2ACD\n"
-                                                                            f"x!help for commands .", color=0x0B5394))
-    await ctx.send("""https://discord.gg/BzY7hf2ACD""")
 
 
 @client.command(aliases=['clean', 'hazf', 'c'])
@@ -148,7 +101,7 @@ async def ping(ctx: commands.Context):
                                                            f"test 3 : {round(client.latency * 1000)} ms\n"
                                                            f"x!help for commands",
                                 color=0x0B5394)
-            )
+        )
         await sleep(5)
         await s.delete()
         await sleep(5)
@@ -183,7 +136,7 @@ async def serverlist(ctx):
         s = await ctx.send(
             embed=discord.Embed(title=f"Only dev can use this.", description=f"this is only owner command .\n"
                                                                              f"x!help for commands", color=0x57ff36)
-            )
+        )
         await sleep(5)
         await s.delete()
         await sleep(5)
@@ -307,7 +260,7 @@ async def moveall(ctx: commands.Context):
                 embed=discord.Embed(title=f"Users moved", description=f"channel : {ctx.author.voice.channel}\n"
                                                                       f"by : {ctx.author.display_name}\n",
                                     color=0x57ff36)
-                )
+            )
             await sleep(5)
             await s.delete()
             await sleep(5)
@@ -582,8 +535,8 @@ async def role(ctx, args, member: discord.Member, role: discord.Role):
             await ctx.send(f"I have removed {member.mention} the role {role.mention}")
     except discord.errors.Forbidden:
         s = discord.Embed(title=f"No perm",
-                              description=f"i need manage members perm.\n"
-                                          f"x!help for commands .", color=0xFF0000)
+                          description=f"i need manage members perm.\n"
+                                      f"x!help for commands .", color=0xFF0000)
         await ctx.send(embed=s)
         await s.add_reaction('\u2705')
         await s.add_reaction('\u274c')
@@ -594,7 +547,7 @@ async def join(ctx):
     await ctx.message.delete()
     if (ctx.author.voice):
         s = discord.Embed(title=f"connected", description=f"voice connected\n"
-                                                              f"x!help for commands .", color=0xFF0000)
+                                                          f"x!help for commands .", color=0xFF0000)
         await ctx.send(embed=s)
         channel = ctx.author.voice.channel
         await channel.connect()
@@ -603,7 +556,7 @@ async def join(ctx):
         await s.add_reaction('\u274c')
     else:
         s = discord.Embed(title=f"you arent in a voice", description=f"join a voice for connect\n"
-                                                                         f"x!help for commands .", color=0xFF0000)
+                                                                     f"x!help for commands .", color=0xFF0000)
         await ctx.send(embed=s)
         await s.add_reaction('\u2705')
         await s.add_reaction('\u274c')
@@ -613,7 +566,7 @@ async def join(ctx):
 async def leave(ctx):
     await ctx.message.delete()
     s = discord.Embed(title=f"disconnected", description=f"leaved\n"
-                                                             f"x!help for commands .", color=0xFF0000)
+                                                         f"x!help for commands .", color=0xFF0000)
     await ctx.send(embed=s)
     await ctx.voice_client.disconnect()
     await s.add_reaction('\u2705')
