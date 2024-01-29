@@ -33,7 +33,7 @@ async def on_command_error(ctx, error):
 # do things while we are ready
 @client.event
 async def on_ready():
-    start()
+    await start()
     print('Servers connected to:')
     for guild in client.guilds:
         print(guild.name)
