@@ -5,12 +5,19 @@ import openai
 from discord.ext import commands
 
 
-
 class Events(commands.Cog):
     queues = {}
 
     def __init__(self, client):
         self.client = client
+
+    # Send an error while command is unknown
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx: commands.Context, error):
+        if isinstance(error, commands.CommandNotFound):
+            await ctx.send(embed=discord.Embed(title=f"Error!",
+                                               description=f"Command not found. use x!help", color=ctx.author.color)
+                           )
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.message.Message):
@@ -27,9 +34,10 @@ class Events(commands.Cog):
 
     async def getchatgptanswer(self, message: discord.Message):
         for user_name, user_data in self.queues.items():
-            req, time = user_data['message'], user_data['lastqueue']
-            if int(time.time() * 1000) - time > 30000:
-                await message.channel.send(f"please wait before you queue again. you should wait {int(time.time() * 1000) - time}")
+            req, ttime = user_data['message'], user_data['lastqueue']
+            if int(ttime.time() * 1000) - ttime > 30000:
+                await message.channel.send(
+                    f"please wait before you queue again. you should wait {int(ttime.time() * 1000) - ttime}")
                 return
 
         response = openai.ChatCompletion.create(
@@ -45,3 +53,16 @@ class Events(commands.Cog):
             presence_penalty=0.0
         )
         return response['choices'][0]['message']['content']
+
+    @commands.Cog.listener()
+    async def on_guild_join(self, guild):
+        bot_entry = await guild.audit_logs(action=discord.AuditLogAction.bot_add).flatten()
+        join = discord.Embed(title="Thanks for adding Xenon Development Community", colour=discord.Colour.blue(),
+                             )
+        try:
+            await bot_entry[0].user.send(embed=join)
+        except discord.errors.Forbidden:
+            try:
+                await guild.system_channel.send(embed=join)
+            except:
+                pass
