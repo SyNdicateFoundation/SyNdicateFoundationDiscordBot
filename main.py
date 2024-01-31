@@ -3,25 +3,26 @@ import discord
 from discord.ext import commands
 import openai
 import events
-import basecommands
-import modcommands
-import othercommands
-import voicecommands
+import basecmds
+import modcmds
+import othercmds
+import voicecmds
 
-openai.api_key = 'your-api-key'
-token = 'your-token'
+starttime = datetime.datetime.utcnow()
+openai.api_key = 'your token'
+token = 'your token'
 intents = discord.Intents.all()
 intents.members = True
 client = commands.Bot(command_prefix='x!', intents=intents)
-starttime = datetime.datetime.utcnow()
+
 
 
 async def start():
     await client.add_cog(events.Events(client))
-    await client.add_cog(basecommands.BaseCommands(client))
-    await client.add_cog(modcommands.ModCommands(client))
-    await client.add_cog(voicecommands.VoiceCommands(client))
-    await client.add_cog(othercommands.OtherCommands(client))
+    await client.add_cog(basecmds.BaseCommands(client, starttime))
+    await client.add_cog(modcmds.ModCommands(client))
+    await client.add_cog(voicecmds.VoiceCommands(client))
+    await client.add_cog(othercmds.OtherCommands(client))
 
 
 # do things while we are ready

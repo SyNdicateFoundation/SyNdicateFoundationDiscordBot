@@ -2,11 +2,12 @@ import datetime
 import discord
 from discord.ext import commands
 from asyncio import sleep
-import main
+
 
 class BaseCommands(commands.Cog):
-    def __init__(self, client):
+    def __init__(self, client, starttime):
         self.client = client
+        self.starttime = starttime
 
     @commands.command()
     async def help(self, ctx: commands.Context):
@@ -89,12 +90,13 @@ class BaseCommands(commands.Cog):
             await sleep(5)
 
     @commands.command()
-    async def uptime(ctx):
-        uptime = datetime.datetime.utcnow() - main.starttime
+    async def uptime(self, ctx: commands.Context):
+        uptime = datetime.datetime.utcnow() - self.starttime
         hour = str(uptime).split('.')[0]
         await ctx.send(embed=discord.Embed(title="Uptime",
                                            description=f"{uptime}",
                                            color=discord.Colour.blue()))
+
     @commands.command()
     async def serverlist(self, ctx: commands.Context):
         if ctx.author.id == 1042894447815430229:
@@ -114,4 +116,3 @@ class BaseCommands(commands.Cog):
             await sleep(5)
             await s.delete()
             await sleep(5)
-

@@ -10,15 +10,6 @@ class Events(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-
-    # Send an error while command is unknown
-    @commands.Cog.listener()
-    async def on_command_error(self, ctx: commands.Context, error):
-        if isinstance(error, commands.CommandNotFound):
-            await ctx.send(embed=discord.Embed(title=f"Error!",
-                                               description=f"Command not found. use x!help", color=ctx.author.color)
-                           )
-
     @commands.Cog.listener()
     async def on_message(self, message: discord.message.Message):
         message.content = message.content.lower()
@@ -30,7 +21,6 @@ class Events(commands.Cog):
             self.queues[message.author.name]["message"] = message.content
             self.queues[message.author.name]["lastqueue"] = int(time.time() * 1000)
             return
-        await self.client.process_commands(message)
 
     async def getchatgptanswer(self, message: discord.Message):
         for user_name, user_data in self.queues.items():
