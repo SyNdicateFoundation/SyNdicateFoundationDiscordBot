@@ -102,3 +102,18 @@ class OtherCommands(commands.Cog):
             ss = await channel.send(embed=s)
             await ss.add_reaction('\u2705')
             await ss.add_reaction('\u274c')
+
+    @commands.command()
+    async def bug(ctx, *, message=None):
+        if message == None:
+            await ctx.send(f"there is no message.")
+        else:
+            await ctx.send("Thank you for reporting this bug.")
+
+            channel = client.get_channel(1195763719620272249)
+            embed2 = discord.Embed(title=f"Bug reported by {ctx.author}", colour=discord.Colour.blue())
+            embed2.add_field(name="Server", value=f"{ctx.guild.name}")
+            embed2.add_field(name="Bug", value=f"{message}")
+            if ctx.guild.icon:
+                embed2.set_thumbnail(url=ctx.guild.icon.url)
+            await channel.send(embed=embed2)
