@@ -213,7 +213,7 @@ class ModCommands(commands.Cog):
 
         except discord.errors.Forbidden:
             embed = discord.Embed(title=f"No perm",
-                                  description=f"Xenon Development Community has no permission to manage channels\n"
+                                  description=f"I have no permission to manage channels\n"
                                               f"x!help for commands .", color=0xFF0000)
             await ctx.send(embed=embed)
 
@@ -239,8 +239,8 @@ class ModCommands(commands.Cog):
                 await s.delete()
                 await sleep(5)
         except discord.errors.Forbidden:
-            embed = discord.Embed(title=f"Xenon Development Community need access",
-                                  description=f"Xenon Development Community has no permission to manage channels\n"
+            embed = discord.Embed(title=f"I need access",
+                                  description=f"I have no no permission to manage channels\n"
                                               f"x!help for commands .", color=0xFF0000)
             await ctx.send(embed=embed)
 

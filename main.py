@@ -9,7 +9,7 @@ import othercmds
 import voicecmds
 
 starttime = datetime.datetime.utcnow()
-openai.api_key = 'your token'
+openai.api_key = 'your key'
 token = 'your token'
 intents = discord.Intents.all()
 intents.members = True

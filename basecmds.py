@@ -40,7 +40,7 @@ class BaseCommands(commands.Cog):
     async def stats(self, ctx: commands.Context):
         member_count = len(ctx.guild.members)
         realmembers = len([m for m in ctx.guild.members if not m.bot])
-        embed = discord.Embed(title=f"Xenon Development Community's bot stats",
+        embed = discord.Embed(title=f"Bot stats",
                               description=f"servers : {len(self.client.guilds)}\n"
                                           f"members : {member_count}\n"
                                           f"ping : {round(self.client.latency * 1000)}\n"
